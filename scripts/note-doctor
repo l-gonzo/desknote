@@ -1,0 +1,50 @@
+#!/bin/sh
+set -u
+
+ok() { printf '\033[32m[OK]\033[0m %s\n' "$*"; }
+warn() { printf '\033[33m[AVISO]\033[0m %s\n' "$*"; }
+fail() { printf '\033[31m[FALLO]\033[0m %s\n' "$*"; }
+
+printf 'Note Desktop Doctor\n===================\n'
+
+for cmd in labwc Xwayland greetd cage gtkgreet note-shell wofi swaybg wpctl; do
+  if command -v "$cmd" >/dev/null 2>&1; then ok "$cmd: $(command -v "$cmd")"; else fail "Falta $cmd"; fi
+done
+for cmd in gtklock grim slurp wl-copy nm-connection-editor pavucontrol; do
+  if command -v "$cmd" >/dev/null 2>&1; then ok "$cmd: $(command -v "$cmd")"; else warn "Componente opcional ausente: $cmd"; fi
+done
+
+if [ -d /dev/dri ]; then
+  ok "Nodos DRM disponibles: $(ls /dev/dri 2>/dev/null | tr '\n' ' ')"
+  if [ -d /dev/dri/by-path ]; then
+    printf 'Rutas DRM por bus:\n'
+    ls -l /dev/dri/by-path 2>/dev/null || true
+  fi
+else
+  fail "No existe /dev/dri"
+fi
+
+if command -v lspci >/dev/null 2>&1; then
+  printf '\nGPU detectada:\n'
+  lspci -nnk | awk '/VGA compatible controller|3D controller|Display controller/{show=1} show{print} /Kernel modules/{if(show){show=0; print ""}}'
+fi
+
+if command -v vulkaninfo >/dev/null 2>&1; then
+  printf '\nVulkan:\n'
+  vulkaninfo --summary 2>/dev/null | sed -n '1,35p' || warn "vulkaninfo no pudo inicializar la GPU"
+fi
+
+if [ -e /sys/module/nvidia_drm/parameters/modeset ]; then
+  value="$(cat /sys/module/nvidia_drm/parameters/modeset 2>/dev/null || true)"
+  [ "$value" = Y ] || [ "$value" = 1 ] \
+    && ok "nvidia_drm modeset habilitado" \
+    || warn "nvidia_drm modeset parece deshabilitado: $value"
+fi
+
+if groups | grep -qw video; then ok "Usuario dentro de video"; else warn "Usuario fuera de video"; fi
+if groups | grep -qw render; then ok "Usuario dentro de render"; else warn "Usuario fuera de render"; fi
+if [ -n "${WAYLAND_DISPLAY:-}" ]; then ok "WAYLAND_DISPLAY=$WAYLAND_DISPLAY"; else warn "No estás dentro de una sesión Wayland"; fi
+
+printf '\nPara recuperar una máquina que no muestre el login:\n'
+printf '  Ctrl+Alt+F2, inicia sesión y ejecuta:\n'
+printf '  sudo systemctl disable --now greetd\n'

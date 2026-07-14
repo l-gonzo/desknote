@@ -1,0 +1,4 @@
+#!/bin/sh
+exec wofi \
+  --conf /etc/xdg/note/wofi/config \
+  --style /etc/xdg/note/wofi/style.css

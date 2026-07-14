@@ -1,0 +1,6 @@
+#!/bin/sh
+for app in foot kitty alacritty kgx gnome-terminal xterm; do
+  if command -v "$app" >/dev/null 2>&1; then exec "$app"; fi
+done
+notify-send "Note Desktop" "No hay una terminal instalada"
+exit 1

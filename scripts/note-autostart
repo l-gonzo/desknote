@@ -1,0 +1,43 @@
+#!/bin/sh
+set -u
+
+start_once() {
+  process="$1"
+  shift
+  if ! pgrep -u "$(id -u)" -x "$process" >/dev/null 2>&1; then
+    "$@" >/tmp/"$process".log 2>&1 &
+  fi
+}
+
+# Las aplicaciones y portales lanzados después reciben el socket Wayland correcto.
+dbus-update-activation-environment --systemd \
+  WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR 2>/dev/null || true
+systemctl --user import-environment \
+  WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_RUNTIME_DIR 2>/dev/null || true
+
+start_once swaybg swaybg -i /usr/share/note-desktop/wallpapers/note-wallpaper.svg -m fill
+start_once mako mako -c /etc/xdg/note/mako/config
+
+if command -v nm-applet >/dev/null 2>&1; then
+  start_once nm-applet nm-applet --indicator
+fi
+if command -v blueman-applet >/dev/null 2>&1; then
+  start_once blueman-applet blueman-applet
+fi
+
+# Agente gráfico de PolicyKit. Debian 13 ya no publica policykit-1-gnome,
+# por eso Note usa lxpolkit como opción común para Debian y Ubuntu.
+if command -v lxpolkit >/dev/null 2>&1; then
+  start_once lxpolkit lxpolkit
+else
+  for agent in \
+    /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 \
+    /usr/libexec/polkit-gnome-authentication-agent-1; do
+    if [ -x "$agent" ]; then
+      start_once polkit-gnome-authentication-agent-1 "$agent"
+      break
+    fi
+  done
+fi
+
+start_once note-shell /usr/local/bin/note-shell

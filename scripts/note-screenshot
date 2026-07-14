@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+mkdir -p "$HOME/Pictures/Screenshots"
+file="$HOME/Pictures/Screenshots/note-$(date +%Y%m%d-%H%M%S).png"
+geometry="$(slurp)" || exit 0
+grim -g "$geometry" "$file"
+wl-copy < "$file"
+notify-send "Captura guardada" "$file"

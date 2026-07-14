@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+
+dbus-update-activation-environment --systemd \
+  DBUS_SESSION_BUS_ADDRESS DISPLAY WAYLAND_DISPLAY \
+  XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE \
+  XDG_RUNTIME_DIR 2>/dev/null || true
+
+systemctl --user import-environment \
+  DBUS_SESSION_BUS_ADDRESS DISPLAY WAYLAND_DISPLAY \
+  XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE \
+  XDG_RUNTIME_DIR 2>/dev/null || true
+
+exec labwc

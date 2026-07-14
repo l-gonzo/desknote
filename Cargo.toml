@@ -1,0 +1,10 @@
+[workspace]
+resolver = "2"
+members = ["crates/note-shell"]
+
+[workspace.package]
+edition = "2024"
+license = "GPL-3.0-or-later"
+version = "0.1.0"
+authors = ["Gonzo M"]
+repository = "https://example.invalid/note-desktop"

@@ -1,0 +1,5 @@
+#!/bin/sh
+for app in gnome-text-editor mousepad featherpad kate; do
+  if command -v "$app" >/dev/null 2>&1; then exec "$app"; fi
+done
+exec /usr/local/bin/note-terminal

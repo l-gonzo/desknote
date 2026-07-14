@@ -1,0 +1,15 @@
+window.active.title.bg.color: #222631
+window.inactive.title.bg.color: #171a22
+window.active.label.text.color: #f8fafc
+window.inactive.label.text.color: #9ca3af
+window.active.border.color: #4b5563
+window.inactive.border.color: #252936
+window.active.button.unpressed.image.color: #f8fafc
+window.inactive.button.unpressed.image.color: #9ca3af
+window.button.hover.bg.color: #3b4252
+menu.items.bg.color: #20242d
+menu.items.text.color: #f8fafc
+menu.items.active.bg.color: #3b4252
+menu.items.active.text.color: #ffffff
+osd.bg.color: #20242d
+osd.label.text.color: #f8fafc

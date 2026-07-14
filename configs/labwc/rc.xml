@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<labwc_config xmlns="http://openbox.org/3.4/rc">
+  <core>
+    <decoration>server</decoration>
+    <gap>8</gap>
+    <adaptiveSync>yes</adaptiveSync>
+    <reuseOutputMode>yes</reuseOutputMode>
+    <xwaylandPersistence>no</xwaylandPersistence>
+  </core>
+
+  <theme>
+    <name>Adwaita</name>
+    <cornerRadius>10</cornerRadius>
+    <font place="ActiveWindow"><name>Cantarell</name><size>10</size><weight>Bold</weight></font>
+    <font place="InactiveWindow"><name>Cantarell</name><size>10</size></font>
+    <font place="MenuItem"><name>Cantarell</name><size>10</size></font>
+    <font place="OnScreenDisplay"><name>Cantarell</name><size>11</size><weight>Bold</weight></font>
+  </theme>
+
+  <desktops>
+    <popupTime>900</popupTime>
+    <names>
+      <name>Principal</name>
+      <name>Trabajo</name>
+      <name>Comunicación</name>
+      <name>Extra</name>
+    </names>
+  </desktops>
+
+  <resize><popupShow>Always</popupShow></resize>
+  <focus><followMouse>no</followMouse><raiseOnFocus>no</raiseOnFocus></focus>
+  <snapping><screenEdgeStrength>18</screenEdgeStrength><windowEdgeStrength>10</windowEdgeStrength></snapping>
+
+  <keyboard>
+    <default />
+    <keybind key="W-Space"><action name="Execute" command="/usr/local/bin/note-launcher" /></keybind>
+    <keybind key="W-Return"><action name="Execute" command="/usr/local/bin/note-terminal" /></keybind>
+    <keybind key="W-e"><action name="Execute" command="/usr/local/bin/note-files" /></keybind>
+    <keybind key="W-b"><action name="Execute" command="/usr/local/bin/note-browser" /></keybind>
+    <keybind key="W-l"><action name="Execute" command="/usr/local/bin/note-lock" /></keybind>
+    <keybind key="W-q"><action name="Close" /></keybind>
+    <keybind key="W-f"><action name="ToggleFullscreen" /></keybind>
+    <keybind key="W-m"><action name="ToggleMaximize" /></keybind>
+    <keybind key="W-Left"><action name="SnapToEdge" direction="left" combine="yes" /></keybind>
+    <keybind key="W-Right"><action name="SnapToEdge" direction="right" combine="yes" /></keybind>
+    <keybind key="W-Up"><action name="SnapToEdge" direction="up" combine="yes" /></keybind>
+    <keybind key="W-Down"><action name="SnapToEdge" direction="down" combine="yes" /></keybind>
+    <keybind key="W-C-Left"><action name="GoToDesktop" to="left" wrap="yes" /></keybind>
+    <keybind key="W-C-Right"><action name="GoToDesktop" to="right" wrap="yes" /></keybind>
+    <keybind key="W-C-S-Left"><action name="SendToDesktop" to="left" wrap="yes" follow="yes" /></keybind>
+    <keybind key="W-C-S-Right"><action name="SendToDesktop" to="right" wrap="yes" follow="yes" /></keybind>
+    <keybind key="Print"><action name="Execute" command="/usr/local/bin/note-screenshot" /></keybind>
+    <keybind key="XF86AudioRaiseVolume"><action name="Execute" command="wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+" /></keybind>
+    <keybind key="XF86AudioLowerVolume"><action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-" /></keybind>
+    <keybind key="XF86AudioMute"><action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" /></keybind>
+    <keybind key="XF86AudioPlay"><action name="Execute" command="playerctl play-pause" /></keybind>
+    <keybind key="XF86AudioNext"><action name="Execute" command="playerctl next" /></keybind>
+    <keybind key="XF86AudioPrev"><action name="Execute" command="playerctl previous" /></keybind>
+    <keybind key="XF86MonBrightnessUp"><action name="Execute" command="brightnessctl set +5%" /></keybind>
+    <keybind key="XF86MonBrightnessDown"><action name="Execute" command="brightnessctl set 5%-" /></keybind>
+  </keyboard>
+
+  <mouse>
+    <default />
+    <context name="Root">
+      <mousebind button="Right" action="Press"><action name="ShowMenu" menu="root-menu" /></mousebind>
+      <mousebind direction="Up" action="Scroll"><action name="GoToDesktop" to="left" wrap="yes" /></mousebind>
+      <mousebind direction="Down" action="Scroll"><action name="GoToDesktop" to="right" wrap="yes" /></mousebind>
+    </context>
+  </mouse>
+
+  <libinput>
+    <device category="default">
+      <naturalScroll>no</naturalScroll>
+      <pointerSpeed>0.0</pointerSpeed>
+      <tap>yes</tap>
+      <tapButtonMap>lrm</tapButtonMap>
+      <disableWhileTyping>yes</disableWhileTyping>
+    </device>
+    <device category="touchpad">
+      <naturalScroll>yes</naturalScroll>
+      <clickMethod>clickfinger</clickMethod>
+      <middleEmulation>yes</middleEmulation>
+    </device>
+  </libinput>
+</labwc_config>

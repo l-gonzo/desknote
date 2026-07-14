@@ -1,0 +1,4 @@
+#!/bin/sh
+if command -v gtklock >/dev/null 2>&1; then exec gtklock; fi
+notify-send "Note Desktop" "gtklock no está instalado"
+exit 1

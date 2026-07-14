@@ -1,0 +1,6 @@
+[terminal]
+vt = 1
+
+[default_session]
+command = "cage -s -- gtkgreet -s /etc/greetd/note-greet.css -c /usr/local/bin/note-session"
+user = "greeter"

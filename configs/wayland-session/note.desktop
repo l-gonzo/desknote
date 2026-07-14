@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Note Desktop
+Comment=Sesión Wayland de Note Desktop
+Exec=/usr/local/bin/note-session
+TryExec=/usr/local/bin/note-session
+Type=Application
+DesktopNames=Note

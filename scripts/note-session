@@ -1,0 +1,24 @@
+#!/bin/sh
+set -eu
+
+export XDG_SESSION_TYPE=wayland
+export XDG_SESSION_DESKTOP=note
+export XDG_CURRENT_DESKTOP=labwc:wlroots:Note
+export XDG_CONFIG_DIRS="/etc/xdg/note${XDG_CONFIG_DIRS:+:$XDG_CONFIG_DIRS}:/etc/xdg"
+export GTK_USE_PORTAL=1
+export MOZ_ENABLE_WAYLAND=1
+export QT_QPA_PLATFORM='wayland;xcb'
+export SDL_VIDEODRIVER='wayland,x11'
+export ELECTRON_OZONE_PLATFORM_HINT=auto
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# Ajustes opcionales para equipos híbridos; no se fuerzan rutas por fabricante.
+[ -r /etc/note-desktop/gpu.conf ] && . /etc/note-desktop/gpu.conf
+[ -r "$HOME/.config/note/gpu.conf" ] && . "$HOME/.config/note/gpu.conf"
+
+if [ -S "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/bus" ]; then
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/bus"
+  exec /usr/local/libexec/note-session-inner
+fi
+
+exec dbus-run-session -- /usr/local/libexec/note-session-inner
