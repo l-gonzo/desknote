@@ -28,33 +28,86 @@ case "${ID:-}" in
 esac
 
 sudo -v
-sudo apt-get update
 
-packages=(
-  labwc xwayland greetd cage gtkgreet tuigreet
+APT_OPTS=(
+  -o Acquire::Retries=5
+  -o Acquire::http::Pipeline-Depth=0
+  -o Acquire::https::Pipeline-Depth=0
+  -o Acquire::Queue-Mode=access
+)
+
+apt_retry() {
+  local attempt
+  for attempt in 1 2 3; do
+    if sudo env DEBIAN_FRONTEND=noninteractive apt-get "${APT_OPTS[@]}" "$@"; then
+      return 0
+    fi
+    echo "[aviso] APT falló en el intento $attempt/3. Limpiando parciales y reintentando..." >&2
+    sudo rm -f /var/cache/apt/archives/partial/* 2>/dev/null || true
+    sleep 3
+  done
+  return 1
+}
+
+apt_retry update
+
+core_packages=(
+  labwc xwayland greetd cage gtkgreet
   dbus-user-session dbus-x11 xdg-utils
   xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
-  pipewire pipewire-pulse wireplumber pavucontrol
+  pipewire pipewire-pulse wireplumber
   network-manager network-manager-gnome
-  bluez blueman upower polkitd lxpolkit
+  bluez upower polkitd lxpolkit
   mako-notifier swaybg wofi foot thunar
-  epiphany-browser gnome-text-editor eog evince file-roller gnome-calculator
   gtklock grim slurp wl-clipboard brightnessctl playerctl libnotify-bin
   libgtk-4-dev libgtk4-layer-shell-dev libglib2.0-dev pkg-config build-essential
   libgl1-mesa-dri mesa-vulkan-drivers mesa-utils vulkan-tools
   curl ca-certificates git pciutils adwaita-icon-theme-full fonts-cantarell fonts-inter
 )
 
-available=()
-for package in "${packages[@]}"; do
-  candidate="$(apt-cache policy "$package" 2>/dev/null | awk '/Candidate:/ {print $2; exit}')"
-  if [[ -n "$candidate" && "$candidate" != "(none)" ]]; then
-    available+=("$package")
-  else
-    echo "[aviso] Paquete sin candidato instalable, se omite: $package"
+optional_packages=(
+  tuigreet pavucontrol blueman
+  epiphany-browser gnome-text-editor eog evince file-roller gnome-calculator
+)
+
+# apt-cache traduce etiquetas como "Candidate" según el locale.
+# Forzamos el locale C únicamente durante la detección.
+package_candidate() {
+  LC_ALL=C apt-cache policy "$1" 2>/dev/null \
+    | awk '/^[[:space:]]*Candidate:/ {print $2; exit}'
+}
+
+filter_available() {
+  local package candidate
+  for package in "$@"; do
+    candidate="$(package_candidate "$package")"
+    if [[ -n "$candidate" && "$candidate" != "(none)" ]]; then
+      printf '%s\n' "$package"
+    else
+      echo "[aviso] Paquete sin candidato instalable, se omite: $package" >&2
+    fi
+  done
+}
+
+mapfile -t core_available < <(filter_available "${core_packages[@]}")
+mapfile -t optional_available < <(filter_available "${optional_packages[@]}")
+
+# Instalamos el núcleo primero. Así un navegador opcional o una dependencia
+# pesada no impide que greetd, labwc y Note Shell queden instalados.
+if ((${#core_available[@]})); then
+  apt_retry install -y "${core_available[@]}" || {
+    echo "Falló la instalación del núcleo. Ejecuta scripts/repair-apt.sh y vuelve a intentar." >&2
+    exit 1
+  }
+fi
+
+# Los paquetes opcionales se instalan uno por uno. Si uno falla por un espejo
+# temporalmente caído, el escritorio puede seguir instalándose.
+for package in "${optional_available[@]}"; do
+  if ! apt_retry install -y "$package"; then
+    echo "[aviso] No se pudo instalar el paquete opcional: $package" >&2
   fi
 done
-sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y "${available[@]}"
 
 critical=(labwc Xwayland greetd cage gtkgreet lxpolkit pkg-config)
 for command in "${critical[@]}"; do

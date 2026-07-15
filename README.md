@@ -116,6 +116,14 @@ En laptops híbridas existe `/etc/note-desktop/gpu.conf.example` para fijar `WLR
 
 Los paquetes APT instalados se conservan para no retirar dependencias compartidas por accidente.
 
-## Corrección 0.1.1
+## Corrección 0.1.2
 
 Esta revisión sustituye `policykit-1-gnome` por `lxpolkit`. Debian 13 Trixie ya no ofrece el paquete anterior, mientras que `lxpolkit` está disponible tanto en Debian como en Ubuntu y se inicia explícitamente dentro de la sesión Note.
+
+## Corrección 0.1.3
+
+- Añade reintentos de APT.
+- Desactiva temporalmente el pipelining HTTP/HTTPS durante la instalación.
+- Instala primero el núcleo del escritorio y después las aplicaciones opcionales.
+- Evita que un navegador o una dependencia opcional impida instalar `greetd`.
+- Incluye `scripts/repair-apt.sh` para limpiar descargas parciales y reparar APT.
