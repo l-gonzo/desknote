@@ -82,7 +82,7 @@ fn register_actions(app: &gtk::Application, state: Rc<RefCell<ShellState>>) {
         let state = state.clone();
         hide_overview.connect_activate(move |_, _| {
             if let Some(window) = state.borrow().overview.as_ref() {
-                window.hide();
+                window.set_visible(false);
             }
         });
     }
@@ -257,7 +257,7 @@ fn create_dock(
         .build();
     configure_layer_window(&window, monitor, Layer::Top, "note-dock");
     window.set_anchor(Edge::Bottom, true);
-    window.set_layer_shell_margin(Edge::Bottom, 14);
+    window.set_margin(Edge::Bottom, 14);
     window.set_keyboard_mode(KeyboardMode::None);
     window.set_exclusive_zone(0);
 
@@ -377,7 +377,7 @@ fn dock_separator() -> gtk::Separator {
 fn toggle_overview(app: &gtk::Application, state: &Rc<RefCell<ShellState>>) {
     if let Some(window) = state.borrow().overview.as_ref() {
         if window.is_visible() {
-            window.hide();
+            window.set_visible(false);
         } else {
             refresh_overview(window, state);
             window.present();
@@ -400,7 +400,7 @@ fn create_overview(app: &gtk::Application, state: &Rc<RefCell<ShellState>>) -> g
         .build();
     window.init_layer_shell();
     window.set_layer(Layer::Overlay);
-    window.set_namespace("note-overview");
+    window.set_namespace(Some("note-overview"));
     for edge in [Edge::Top, Edge::Bottom, Edge::Left, Edge::Right] {
         window.set_anchor(edge, true);
     }
@@ -475,7 +475,8 @@ fn create_overview(app: &gtk::Application, state: &Rc<RefCell<ShellState>>) -> g
         let apps = apps.clone();
         let window = window.clone();
         search.connect_search_changed(move |entry| {
-            rebuild_app_grid(&grid, &apps, entry.text().as_str(), &window);
+            let query = entry.text().to_string();
+            rebuild_app_grid(&grid, &apps, &query, &window);
         });
     }
 
@@ -484,7 +485,7 @@ fn create_overview(app: &gtk::Application, state: &Rc<RefCell<ShellState>>) -> g
         let window = window.clone();
         controller.connect_key_pressed(move |_, key, _, _| {
             if key == gdk::Key::Escape {
-                window.hide();
+                window.set_visible(false);
                 return glib::Propagation::Stop;
             }
             glib::Propagation::Proceed
@@ -542,7 +543,7 @@ fn rebuild_window_list(list: &gtk::Box, tr: &Translator, overview: &gtk::Applica
         let overview = overview.clone();
         row.connect_clicked(move |_| {
             let _ = focus_toplevel(&target);
-            overview.hide();
+            overview.set_visible(false);
         });
         list.append(&row);
     }
@@ -583,7 +584,7 @@ fn rebuild_app_grid(
             if let Err(error) = app_info.launch() {
                 eprintln!("note-shell: no se pudo abrir {}: {error}", app_info.name);
             }
-            overview.hide();
+            overview.set_visible(false);
         });
         grid.attach(&button, (position % 5) as i32, (position / 5) as i32, 1, 1);
     }
@@ -591,7 +592,7 @@ fn rebuild_app_grid(
 
 fn toggle_control_center(app: &gtk::Application, state: &Rc<RefCell<ShellState>>) {
     if let Some(window) = state.borrow().control_center.as_ref() {
-        if window.is_visible() { window.hide(); } else { window.present(); }
+        if window.is_visible() { window.set_visible(false); } else { window.present(); }
         return;
     }
     let window = create_control_center(app, &state.borrow().settings);
@@ -610,11 +611,11 @@ fn create_control_center(app: &gtk::Application, settings: &NoteSettings) -> gtk
         .build();
     window.init_layer_shell();
     window.set_layer(Layer::Overlay);
-    window.set_namespace("note-control-center");
+    window.set_namespace(Some("note-control-center"));
     window.set_anchor(Edge::Top, true);
     window.set_anchor(Edge::Right, true);
-    window.set_layer_shell_margin(Edge::Top, 42);
-    window.set_layer_shell_margin(Edge::Right, 12);
+    window.set_margin(Edge::Top, 42);
+    window.set_margin(Edge::Right, 12);
     window.set_keyboard_mode(KeyboardMode::OnDemand);
 
     let root = gtk::Box::new(gtk::Orientation::Vertical, 14);
@@ -693,7 +694,7 @@ fn create_control_center(app: &gtk::Application, settings: &NoteSettings) -> gtk
         let window = window.clone();
         controller.connect_key_pressed(move |_, key, _, _| {
             if key == gdk::Key::Escape {
-                window.hide();
+                window.set_visible(false);
                 return glib::Propagation::Stop;
             }
             glib::Propagation::Proceed
@@ -807,9 +808,9 @@ fn configure_layer_window(
 ) {
     window.init_layer_shell();
     window.set_layer(layer);
-    window.set_namespace(namespace);
+    window.set_namespace(Some(namespace));
     if let Some(monitor) = monitor {
-        window.set_monitor(monitor);
+        window.set_monitor(Some(monitor));
     }
 }
 

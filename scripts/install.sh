@@ -168,7 +168,7 @@ fi
 
 cat <<'MSG'
 
-Note Desktop 0.2.1 quedó instalado.
+Note Desktop 0.2.2 quedó instalado.
 
 Prueba antes de reiniciar:
   1. Ctrl+Alt+F3

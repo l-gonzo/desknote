@@ -1,3 +1,11 @@
+note-desktop (0.2.2-1) unstable; urgency=medium
+
+  * Fix gtk4-layer-shell 0.7.1 API calls in note-shell.
+  * Replace deprecated GTK hide calls with set_visible(false).
+  * Improve search query string ownership for gtk4 0.10.
+
+ -- Note Desktop Project <maintainers@invalid.example>  Wed, 15 Jul 2026 06:45:00 +0000
+
 note-desktop (0.2.0-1) unstable; urgency=medium
 
   * Initial alpha package with custom shell and settings.

@@ -1,4 +1,4 @@
-# Note Desktop 0.2.1 Alpha
+# Note Desktop 0.2.2 Alpha
 
 Note Desktop es un entorno Wayland experimental con flujo de trabajo inspirado en GNOME y una identidad visual inspirada en macOS. Esta entrega reemplaza la barra y el dock genéricos del MVP por un shell propio escrito en Rust y GTK4.
 
@@ -51,8 +51,8 @@ Requisitos previos:
 - Al menos 4 GB de almacenamiento libres durante la compilación.
 
 ```bash
-unzip note-desktop-0.2.1.zip
-cd note-desktop-0.2.1
+unzip note-desktop-0.2.2.zip
+cd note-desktop-0.2.2
 chmod +x scripts/*
 ./scripts/install.sh
 ```
@@ -188,13 +188,13 @@ chmod +x scripts/*
 Resultado:
 
 ```text
-dist/note-desktop_0.2.1_<arquitectura>.deb
+dist/note-desktop_0.2.2_<arquitectura>.deb
 ```
 
 Instalación local:
 
 ```bash
-sudo apt install ./dist/note-desktop_0.2.1_amd64.deb
+sudo apt install ./dist/note-desktop_0.2.2_amd64.deb
 ```
 
 Este `.deb` es para pruebas locales. Para poder ejecutar algún día `sudo apt install note-desktop`, todavía hace falta publicar y firmar un repositorio APT. Los esqueletos de distribución están en `packaging/`.

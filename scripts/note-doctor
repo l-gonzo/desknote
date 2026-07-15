@@ -6,7 +6,7 @@ ok() { printf '\033[32m[OK]\033[0m %s\n' "$*"; }
 warn() { printf '\033[33m[AVISO]\033[0m %s\n' "$*"; }
 fail() { printf '\033[31m[FALTA]\033[0m %s\n' "$*"; }
 
-printf 'Note Desktop doctor %s\n\n' "0.2.0"
+printf 'Note Desktop doctor %s\n\n' "0.2.2"
 critical=(labwc Xwayland cage gtkgreet note-shell note-settings wlrctl swaybg mako wpctl)
 for command in "${critical[@]}"; do
   if command -v "$command" >/dev/null 2>&1; then ok "$command: $(command -v "$command")"; else fail "$command"; fi

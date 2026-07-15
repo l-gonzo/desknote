@@ -1,5 +1,5 @@
 Name:           note-desktop
-Version:        0.2.1
+Version:        0.2.2
 Release:        1%{?dist}
 Summary:        Experimental Wayland desktop with a GNOME-like workflow
 License:        GPL-3.0-or-later
@@ -67,5 +67,5 @@ DESTDIR=%{buildroot} ./scripts/install-files.sh %{buildroot}
 %config(noreplace) /etc/note-desktop/gpu.conf.example
 
 %changelog
-* Tue Jul 14 2026 Note Desktop Project <maintainers@invalid.example> - 0.2.1-1
+* Tue Jul 14 2026 Note Desktop Project <maintainers@invalid.example> - 0.2.2-1
 - Initial alpha package
