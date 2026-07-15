@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Note Desktop
-Comment=Sesión Wayland de Note Desktop
-Exec=/usr/local/bin/note-session
-TryExec=/usr/local/bin/note-session
+Name[es]=Escritorio Note
+Comment=Wayland desktop with a GNOME-like workflow and a macOS-inspired visual language
+Comment[es]=Escritorio Wayland con flujo tipo GNOME y estética inspirada en macOS
+Exec=/usr/bin/note-session
+TryExec=/usr/bin/note-session
 Type=Application
 DesktopNames=Note

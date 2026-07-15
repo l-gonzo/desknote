@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openbox_menu xmlns="http://openbox.org/3.4/menu">
   <menu id="root-menu" label="Note">
-    <item label="Aplicaciones"><action name="Execute" command="/usr/local/bin/note-launcher" /></item>
+    <item label="Vista general"><action name="Execute" command="note-overview" /></item>
+    <item label="Configuración"><action name="Execute" command="note-settings" /></item>
     <separator />
-    <item label="Terminal"><action name="Execute" command="/usr/local/bin/note-terminal" /></item>
-    <item label="Archivos"><action name="Execute" command="/usr/local/bin/note-files" /></item>
-    <item label="Navegador"><action name="Execute" command="/usr/local/bin/note-browser" /></item>
+    <item label="Terminal"><action name="Execute" command="note-terminal" /></item>
+    <item label="Archivos"><action name="Execute" command="note-files" /></item>
+    <item label="Navegador"><action name="Execute" command="note-browser" /></item>
     <separator />
-    <item label="Bloquear"><action name="Execute" command="/usr/local/bin/note-lock" /></item>
+    <item label="Bloquear"><action name="Execute" command="note-lock" /></item>
     <item label="Cerrar sesión"><action name="Exit" /></item>
   </menu>
 </openbox_menu>

@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+if [ -n "${WAYLAND_DISPLAY:-}" ] || [ -n "${DISPLAY:-}" ]; then
+  echo "Ejecuta esta prueba desde una TTY real, no desde otra sesión gráfica." >&2
+  exit 1
+fi
+exec dbus-run-session -- /usr/bin/note-session

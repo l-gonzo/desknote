@@ -1,0 +1,15 @@
+Source: note-desktop
+Section: x11
+Priority: optional
+Maintainer: Note Desktop Project <maintainers@invalid.example>
+Build-Depends: debhelper-compat (= 13), cargo, rustc (>= 1.83), pkg-config, libgtk-4-dev, libgtk4-layer-shell-dev
+Standards-Version: 4.7.0
+Rules-Requires-Root: no
+Homepage: https://example.invalid/note-desktop
+
+Package: note-desktop
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, labwc, xwayland, greetd, cage, gtkgreet, wlrctl, dbus-user-session, xdg-desktop-portal, xdg-desktop-portal-wlr, xdg-desktop-portal-gtk, pipewire, wireplumber, network-manager, bluez, upower, polkitd, lxpolkit, mako-notifier, swaybg, foot, thunar
+Description: experimental Wayland desktop with a GNOME-like workflow
+ Custom Rust/GTK4 shell, settings application, session and integration.
+ This alpha uses labwc as its temporary compositor.

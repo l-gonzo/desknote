@@ -1,0 +1,5 @@
+note-desktop (0.2.0-1) unstable; urgency=medium
+
+  * Initial alpha package with custom shell and settings.
+
+ -- Note Desktop Project <maintainers@invalid.example>  Tue, 14 Jul 2026 22:00:00 -0600

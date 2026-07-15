@@ -1,0 +1,23 @@
+#!/bin/sh
+set -u
+
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+export XDG_SESSION_TYPE=wayland
+export XDG_CURRENT_DESKTOP=NoteGreeter
+export GTK_THEME=Adwaita:dark
+export XCURSOR_THEME=Adwaita
+export XCURSOR_SIZE=24
+
+run_greeter() {
+  cage -s -- gtkgreet -l -s /etc/greetd/note-greet.css -c /usr/bin/note-session
+}
+
+run_greeter
+status=$?
+if [ "$status" -ne 0 ] && [ "${WLR_RENDERER:-}" != "pixman" ]; then
+  echo "note-greeter: accelerated renderer failed; retrying with pixman" >&2
+  export WLR_RENDERER=pixman
+  export WLR_NO_HARDWARE_CURSORS=1
+  exec cage -s -- gtkgreet -l -s /etc/greetd/note-greet.css -c /usr/bin/note-session
+fi
+exit "$status"

@@ -1,10 +1,21 @@
 [workspace]
 resolver = "2"
-members = ["crates/note-shell"]
+members = [
+  "crates/note-core",
+  "crates/note-shell",
+  "crates/note-settings",
+]
 
 [workspace.package]
-edition = "2024"
+version = "0.2.0"
+edition = "2021"
+rust-version = "1.83"
 license = "GPL-3.0-or-later"
-version = "0.1.0"
 authors = ["Gonzo M"]
-repository = "https://example.invalid/note-desktop"
+
+[workspace.dependencies]
+chrono = "0.4"
+gtk = { package = "gtk4", version = "0.10.3", features = ["v4_10"] }
+gtk4-layer-shell = "0.7.1"
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"

@@ -1,11 +1,9 @@
-# Copia este archivo a /etc/note-desktop/gpu.conf o ~/.config/note/gpu.conf.
-# No es necesario en la mayoría de equipos.
+# Copia este archivo a /etc/note-desktop/gpu.conf o
+# ~/.config/note-desktop/gpu.conf y descomenta sólo lo necesario.
 
-# En una laptop híbrida puedes ordenar explícitamente los dispositivos DRM:
+# Renderizado por software para VMs problemáticas:
+# export WLR_RENDERER=pixman
+# export WLR_NO_HARDWARE_CURSORS=1
+
+# Orden manual para equipos multi-GPU:
 # export WLR_DRM_DEVICES=/dev/dri/card1:/dev/dri/card0
-
-# Para depurar, puedes solicitar el renderer GLES2 de wlroots:
-# export WLR_RENDERER=gles2
-
-# No fuerces GBM_BACKEND ni variables propietarias de NVIDIA salvo que el
-# diagnóstico de tu controlador concreto lo requiera.

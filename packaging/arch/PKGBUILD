@@ -1,0 +1,21 @@
+pkgname=note-desktop
+pkgver=0.2.0
+pkgrel=1
+pkgdesc='Experimental Wayland desktop with a GNOME-like workflow and macOS-inspired shell'
+arch=('x86_64')
+url='https://example.invalid/note-desktop'
+license=('GPL-3.0-or-later')
+depends=('labwc' 'xorg-xwayland' 'greetd' 'cage' 'gtkgreet' 'wlrctl' 'gtk4' 'gtk4-layer-shell' 'pipewire' 'wireplumber' 'networkmanager' 'bluez' 'upower' 'polkit' 'lxsession' 'mako' 'swaybg' 'foot' 'thunar' 'grim' 'slurp' 'wl-clipboard' 'xdg-desktop-portal' 'xdg-desktop-portal-wlr' 'xdg-desktop-portal-gtk')
+makedepends=('cargo' 'pkgconf')
+source=("$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  cargo build --release --locked
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  DESTDIR="$pkgdir" ./scripts/install-files.sh "$pkgdir"
+}

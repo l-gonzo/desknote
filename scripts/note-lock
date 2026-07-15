@@ -1,4 +1,4 @@
 #!/bin/sh
 if command -v gtklock >/dev/null 2>&1; then exec gtklock; fi
-notify-send "Note Desktop" "gtklock no está instalado"
-exit 1
+if command -v swaylock >/dev/null 2>&1; then exec swaylock -f -c 11141a; fi
+loginctl lock-session "${XDG_SESSION_ID:-}" 2>/dev/null || true

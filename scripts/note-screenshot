@@ -1,8 +1,12 @@
 #!/bin/sh
 set -eu
-mkdir -p "$HOME/Pictures/Screenshots"
-file="$HOME/Pictures/Screenshots/note-$(date +%Y%m%d-%H%M%S).png"
-geometry="$(slurp)" || exit 0
-grim -g "$geometry" "$file"
-wl-copy < "$file"
-notify-send "Captura guardada" "$file"
+dir="${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
+mkdir -p "$dir"
+file="$dir/Captura-$(date +%Y%m%d-%H%M%S).png"
+if command -v slurp >/dev/null 2>&1; then
+  geometry=$(slurp) || exit 0
+  grim -g "$geometry" "$file"
+else
+  grim "$file"
+fi
+command -v notify-send >/dev/null 2>&1 && notify-send "Captura guardada" "$file" || true

@@ -1,0 +1,186 @@
+* {
+  font-family: Inter, Cantarell, Sans;
+  font-size: 13px;
+}
+
+window { background: transparent; }
+
+.panel {
+  min-height: 36px;
+  color: #f7f8fb;
+  background: @note_panel_bg;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.30);
+}
+
+.note-logo,
+.clock-button,
+.status-cluster,
+.icon-button {
+  min-height: 28px;
+  min-width: 30px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 9px;
+  color: #f7f8fb;
+  background: transparent;
+}
+
+.note-logo {
+  color: @note_accent;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.note-logo:hover,
+.clock-button:hover,
+.status-cluster:hover,
+.icon-button:hover {
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.active-application { font-weight: 700; }
+.panel-clock { font-weight: 650; }
+.panel-status { color: rgba(247, 248, 251, 0.82); }
+
+.dock {
+  padding: 8px 10px 6px;
+  color: #f7f8fb;
+  background: @note_dock_bg;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 22px;
+  box-shadow: 0 13px 38px rgba(0, 0, 0, 0.48);
+}
+
+.dock-item {
+  padding: 3px;
+  border: 0;
+  border-radius: 15px;
+  color: #f7f8fb;
+  background: rgba(255, 255, 255, 0.045);
+  transition: 140ms ease;
+}
+
+.dock-item:hover,
+.dock-item-hover {
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.34);
+}
+
+.running-indicator {
+  margin-top: -7px;
+  color: @note_accent;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.dock-separator {
+  margin: 8px 2px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.overview {
+  padding: 26px;
+  color: #f7f8fb;
+  background: rgba(10, 12, 18, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 28px;
+  box-shadow: 0 25px 90px rgba(0, 0, 0, 0.62);
+}
+
+.overview-search {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 16px;
+  color: #f7f8fb;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.section-title {
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.window-card,
+.app-tile,
+.workspace-pill,
+.quick-tile,
+.power-button {
+  color: #f7f8fb;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+}
+
+.window-card {
+  padding: 11px;
+}
+
+.window-card:hover,
+.app-tile:hover,
+.workspace-pill:hover,
+.quick-tile:hover,
+.power-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.window-title { font-weight: 700; }
+.muted { color: rgba(247, 248, 251, 0.58); }
+
+.app-tile {
+  min-width: 118px;
+  min-height: 104px;
+  padding: 14px 8px;
+}
+
+.workspace-pill {
+  min-width: 42px;
+  min-height: 30px;
+  border-radius: 99px;
+  font-weight: 800;
+}
+
+.control-center {
+  min-width: 330px;
+  padding: 18px;
+  color: #f7f8fb;
+  background: rgba(21, 23, 30, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 22px;
+  box-shadow: 0 16px 54px rgba(0, 0, 0, 0.52);
+}
+
+.control-title { font-size: 16px; font-weight: 800; }
+.quick-tile { min-height: 45px; padding: 8px 10px; }
+.slider-row { padding: 8px 5px; }
+
+scale trough {
+  min-height: 6px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+scale highlight {
+  border-radius: 99px;
+  background: @note_accent;
+}
+
+scale slider {
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: 99px;
+  background: #ffffff;
+}
+
+switch:checked { background: @note_accent; }
+
+.calendar-popover contents {
+  min-width: 330px;
+  color: #f7f8fb;
+  background: rgba(22, 24, 31, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 18px;
+}
+
+.calendar-title { font-size: 17px; font-weight: 800; }

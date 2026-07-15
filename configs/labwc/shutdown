@@ -1,4 +1,3 @@
 #!/bin/sh
-pkill -x note-shell 2>/dev/null || true
-pkill -x mako 2>/dev/null || true
+systemctl --user stop note-session.target 2>/dev/null || true
 pkill -x swaybg 2>/dev/null || true

@@ -1,2 +1,2 @@
 #!/bin/sh
-exec labwc --exit
+labwc --exit >/dev/null 2>&1 || killall -TERM labwc >/dev/null 2>&1 || true

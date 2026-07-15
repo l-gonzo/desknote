@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Note Settings
+Name[es]=Configuración de Note
+Comment=Configure the Note Desktop environment
+Comment[es]=Configura el entorno de escritorio Note
+Exec=note-settings
+Icon=preferences-system-symbolic
+Categories=Settings;System;
+Keywords=Settings;Desktop;Appearance;Language;Display;Network;
+StartupNotify=true

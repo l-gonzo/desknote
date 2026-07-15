@@ -1,0 +1,44 @@
+* { font-family: Inter, Cantarell, Sans; }
+
+.settings-window { background: #11141a; color: #f5f7fb; }
+headerbar { background: rgba(25, 28, 36, 0.96); border-bottom: 1px solid rgba(255,255,255,.08); }
+
+.settings-sidebar {
+  padding: 16px 10px;
+  background: #171a21;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-sidebar row {
+  margin: 2px 0;
+  border-radius: 10px;
+}
+
+.settings-sidebar row:selected {
+  background: rgba(84, 151, 255, 0.26);
+  color: #ffffff;
+}
+
+.settings-page { background: #11141a; }
+.page-title { font-size: 28px; font-weight: 850; }
+.page-description { color: rgba(245,247,251,.60); font-size: 14px; }
+.page-hero-icon { margin: 44px; opacity: .75; }
+
+.settings-group {
+  margin-top: 18px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 16px;
+  background: rgba(255,255,255,.035);
+}
+
+.setting-row {
+  min-height: 62px;
+  padding: 13px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.setting-row:last-child { border-bottom: 0; }
+.setting-title { font-weight: 700; }
+.setting-description { color: rgba(245,247,251,.54); font-size: 12px; }
+.about-version { font-size: 22px; font-weight: 800; }
+.save-status { color: rgba(245,247,251,.66); }

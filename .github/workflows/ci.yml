@@ -1,21 +1,23 @@
 name: CI
-
 on:
   push:
   pull_request:
 
 jobs:
-  build:
-    runs-on: ubuntu-24.04
+  build-debian:
+    runs-on: ubuntu-latest
+    container: debian:13
     steps:
       - uses: actions/checkout@v4
-      - name: System dependencies
+      - name: Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-4-dev libgtk4-layer-shell-dev pkg-config
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
-      - run: cargo fmt --check
-      - run: cargo clippy --workspace --all-targets -- -D warnings
-      - run: cargo build --release
+          apt-get update
+          apt-get install -y cargo rustc pkg-config build-essential libgtk-4-dev libgtk4-layer-shell-dev
+      - name: Format
+        run: cargo fmt --all -- --check
+      - name: Check
+        run: cargo check --workspace --all-targets
+      - name: Test
+        run: cargo test --workspace
+      - name: Shell validation
+        run: find scripts configs/labwc -type f -perm /111 -print0 | xargs -0 -n1 sh -n

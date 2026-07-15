@@ -1,129 +1,234 @@
-# Note Desktop MVP
+# Note Desktop 0.2.0 Alpha
 
-Una sesión de escritorio Wayland para Debian y Ubuntu mínimos, con estética sencilla inspirada en GNOME/macOS y shell propio escrito en Rust.
+Note Desktop es un entorno Wayland experimental con flujo de trabajo inspirado en GNOME y una identidad visual inspirada en macOS. Esta entrega reemplaza la barra y el dock genéricos del MVP por un shell propio escrito en Rust y GTK4.
 
-> Estado real: es un MVP instalable, no un entorno de escritorio terminado. Para que sea usable desde la primera prueba utiliza **labwc como compositor temporal**. La barra y el dock sí son componentes propios (`note-shell`). El objetivo posterior es sustituir labwc por `note-compositor` basado en Smithay.
+> Estado real: **alpha funcional**. El shell, overview, dock, centro de control y Configuración son propios. El compositor temporal sigue siendo **labwc**; `note-compositor` con Smithay forma parte de la siguiente etapa. No es todavía un reemplazo de GNOME 1.0.
 
-## Incluye
+## Qué contiene
 
-- Login gráfico: greetd + cage + gtkgreet.
-- Sesión exclusivamente Wayland.
-- Aplicaciones X11 mediante XWayland rootless.
-- Barra superior y dock propios en Rust/GTK4.
-- Lanzador Wofi tematizado y notificaciones Mako tematizadas.
-- Cuatro escritorios virtuales, snapping y atajos.
-- PipeWire/WirePlumber, NetworkManager, BlueZ y UPower.
-- Portales XDG para capturas y aplicaciones sandbox.
-- Bloqueo con gtklock y capturas con grim/slurp.
-- Diagnóstico de GPU, DRM y dependencias.
-- Instalación y desinstalación reversibles.
+- Sesión Wayland sin sesión Xorg.
+- XWayland rootless administrado por labwc para aplicaciones antiguas.
+- Pantalla de acceso con `greetd`, `cage` y `gtkgreet`.
+- Barra superior propia con aplicación activa, reloj, calendario y estado.
+- Dock flotante propio con favoritos, indicadores y enfoque de ventanas abiertas.
+- Tema de ventanas Note con botones tipo semáforo colocados a la izquierda.
+- Overview tipo GNOME con búsqueda, aplicaciones, ventanas y escritorios.
+- Centro de control con Wi-Fi, Bluetooth, volumen, brillo y energía.
+- Aplicación `note-settings` con apariencia, idioma y lanzadores de configuración.
+- Cinco idiomas: español de México, inglés estadounidense, portugués de Brasil, francés y alemán.
+- Temas claro/oscuro/automático, color de acento y opacidades configurables.
+- PipeWire, WirePlumber, NetworkManager, BlueZ, PolicyKit y portales XDG.
+- Modo de recuperación con renderizado por software para VirtualBox/VMware.
+- Instalador directo para Debian 13 y Ubuntu reciente.
+- Generador local de paquete `.deb` y esqueletos para RPM y Arch.
 
-## Sistemas objetivo
+## Captura conceptual de la sesión
 
-- Debian 13 o posterior, instalación mínima.
-- Ubuntu Server 24.04/26.04 o posterior, sin escritorio.
-- Arquitecturas que tengan los paquetes requeridos; amd64 es la ruta principal prevista.
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│ ●  Aplicación activa                 mar 14 jul 21:45       87%  ◉ │
+└──────────────────────────────────────────────────────────────────────┘
 
+                    Super abre el Overview
 
-## Qué está validado
+                ╭────────────────────────────╮
+                │  Buscar aplicaciones…      │
+                │  Ventanas | Aplicaciones   │
+                │       Escritorios          │
+                ╰────────────────────────────╯
 
-- Sintaxis de todos los scripts Bash/POSIX.
-- Parseo de los archivos TOML y XML.
-- Estructura de instalación, respaldo y recuperación por TTY.
-- APIs del shell contrastadas con GTK4 y gtk4-layer-shell actuales.
+                   ╭──────────────────────╮
+                   │  Dock flotante       │
+                   ╰──────────────────────╯
+```
 
-No pude compilar ni arrancar la sesión dentro del contenedor donde se generó el proyecto porque no tenía toolchain ni librerías gráficas y la instalación de paquetes agotó el tiempo disponible. Por eso debes tratar esta entrega como **alpha** y probar primero desde una TTY, no como sistema de producción.
+## Instalación en Debian o Ubuntu sin escritorio
 
-## Instalación
+Requisitos previos:
 
-Puedes ejecutarlo como usuario con `sudo` o directamente como `root` en una instalación mínima de Debian:
+- Sistema Debian/Ubuntu ya instalado y con Internet.
+- Usuario normal con `sudo`, o una sesión de root.
+- Al menos 4 GB de almacenamiento libres durante la compilación.
 
 ```bash
-cd note-desktop-mvp
+unzip note-desktop-0.2.0.zip
+cd note-desktop-0.2.0
 chmod +x scripts/*
 ./scripts/install.sh
 ```
 
-Antes de reiniciar, prueba desde una TTY:
+El instalador:
+
+1. Detecta Debian o Ubuntu.
+2. Habilita `universe` en Ubuntu cuando es necesario.
+3. Comprueba candidatos APT sin depender del idioma del sistema.
+4. Instala la pila gráfica, servicios, bibliotecas y compilador Rust.
+5. Compila `note-shell` y `note-settings`.
+6. Instala archivos de sesión, servicios y configuraciones.
+7. Respalda la configuración anterior de greetd.
+8. Agrega al usuario a `video`, `render` e `input` cuando existen.
+9. Habilita el inicio gráfico.
+
+### Prueba antes de reiniciar
+
+Desde una TTY real, no desde otra sesión gráfica:
 
 ```bash
 note-doctor
 note-test-from-tty
 ```
 
-Después:
+Salir de la prueba:
+
+```text
+Super + Shift + E
+```
+
+Cuando la prueba funcione:
 
 ```bash
 sudo reboot
 ```
 
-## Recuperación
-
-Si la pantalla gráfica no inicia:
+### Recuperación ante pantalla negra
 
 ```text
 Ctrl + Alt + F2
 ```
 
-Inicia sesión y ejecuta:
-
 ```bash
 sudo systemctl disable --now greetd
 sudo systemctl set-default multi-user.target
+sudo reboot
 ```
 
-## Atajos
+## VirtualBox y VMware
 
-| Atajo | Acción |
-|---|---|
-| Super + Espacio | Lanzador |
-| Super + Enter | Terminal |
-| Super + E | Archivos |
-| Super + B | Navegador |
-| Super + L | Bloquear |
-| Super + Q | Cerrar ventana |
-| Super + F | Pantalla completa |
-| Super + M | Maximizar |
-| Super + Flechas | Ajustar ventana |
-| Super + Ctrl + ←/→ | Cambiar escritorio |
-| Print | Captura de una región |
+Usa VMSVGA, 128 MB de vídeo y aceleración 3D. Si EGL falla durante los primeros segundos, `note-session-inner` vuelve a intentar automáticamente con Pixman.
+
+También se puede forzar permanentemente en `/etc/note-desktop/gpu.conf`:
+
+```bash
+export WLR_RENDERER=pixman
+export WLR_NO_HARDWARE_CURSORS=1
+```
 
 ## NVIDIA
 
-El MVP usa la ruta DRM/KMS + GBM de wlroots/labwc. Revisa:
-
-```bash
-cat /sys/module/nvidia_drm/parameters/modeset
-note-doctor
-```
-
-Debe mostrar `Y` o `1`. Si ya instalaste el controlador propietario pero KMS aparece apagado:
+El instalador no instala automáticamente el controlador propietario. Primero instala el controlador adecuado de la distribución y comprueba DRM KMS. Después puedes ejecutar:
 
 ```bash
 sudo note-nvidia-kms
 sudo reboot
 ```
 
-El instalador no instala automáticamente el controlador propietario porque eso depende de los repositorios y de la GPU concreta. No necesitas una sesión Xorg; `xwayland` es suficiente para las aplicaciones X11.
-
-En laptops híbridas existe `/etc/note-desktop/gpu.conf.example` para fijar `WLR_DRM_DEVICES` solamente cuando la detección automática no elija bien la GPU de presentación.
-
-## Desinstalación
+Diagnóstico:
 
 ```bash
-./scripts/uninstall.sh
+note-doctor
+cat /sys/module/nvidia_drm/parameters/modeset
 ```
 
-Los paquetes APT instalados se conservan para no retirar dependencias compartidas por accidente.
+## Atajos
 
-## Corrección 0.1.2
+| Atajo | Acción |
+|---|---|
+| `Super` o `Super + Espacio` | Overview |
+| `Super + Enter` | Terminal |
+| `Super + E` | Archivos |
+| `Super + B` | Navegador |
+| `Super + ,` | Configuración |
+| `Super + L` | Bloquear |
+| `Super + Q` | Cerrar ventana |
+| `Super + M` | Minimizar |
+| `Super + F` | Pantalla completa |
+| `Super + ↑` | Maximizar |
+| `Super + ←/→` | Ajustar a un lado |
+| `Super + Ctrl + ←/→` | Cambiar escritorio |
+| `Super + Ctrl + Shift + ←/→` | Mover ventana de escritorio |
+| `Print` | Captura de región |
+| `Super + Shift + E` | Cerrar sesión |
 
-Esta revisión sustituye `policykit-1-gnome` por `lxpolkit`. Debian 13 Trixie ya no ofrece el paquete anterior, mientras que `lxpolkit` está disponible tanto en Debian como en Ubuntu y se inicia explícitamente dentro de la sesión Note.
+## Idiomas
 
-## Corrección 0.1.3
+El idioma se cambia en **Configuración → Apariencia → Idioma de la interfaz**. La elección se guarda en:
 
-- Añade reintentos de APT.
-- Desactiva temporalmente el pipelining HTTP/HTTPS durante la instalación.
-- Instala primero el núcleo del escritorio y después las aplicaciones opcionales.
-- Evita que un navegador o una dependencia opcional impida instalar `greetd`.
-- Incluye `scripts/repair-apt.sh` para limpiar descargas parciales y reparar APT.
+```text
+~/.config/note-desktop/settings.toml
+~/.config/environment.d/90-note-locale.conf
+```
+
+Idiomas incluidos:
+
+```text
+es-MX  en-US  pt-BR  fr-FR  de-DE
+```
+
+La aplicación se recarga al aplicar; algunas aplicaciones externas requieren cerrar sesión para recibir el nuevo locale.
+
+## Compilar manualmente
+
+En Debian 13:
+
+```bash
+sudo apt install build-essential pkg-config rustc cargo \
+  libgtk-4-dev libgtk4-layer-shell-dev
+cargo build --release
+```
+
+Las dependencias Rust están seleccionadas para ser compatibles con Rust 1.85 de Debian 13.
+
+## Crear paquete `.deb`
+
+```bash
+chmod +x scripts/*
+./scripts/build-deb.sh
+```
+
+Resultado:
+
+```text
+dist/note-desktop_0.2.0_<arquitectura>.deb
+```
+
+Instalación local:
+
+```bash
+sudo apt install ./dist/note-desktop_0.2.0_amd64.deb
+```
+
+Este `.deb` es para pruebas locales. Para poder ejecutar algún día `sudo apt install note-desktop`, todavía hace falta publicar y firmar un repositorio APT. Los esqueletos de distribución están en `packaging/`.
+
+## Estructura
+
+```text
+crates/note-core       configuración, idiomas, aplicaciones y servicios
+crates/note-shell      panel, dock, overview y centro de control
+crates/note-settings   aplicación gráfica de configuración
+configs/               labwc, greetd, sesión y portales
+systemd/user/          servicios de la sesión
+scripts/               instalación, sesión, diagnóstico y empaquetado
+packaging/             Debian, Arch y RPM
+assets/                estilos, iconos y fondos
+locales/               traducciones
+```
+
+Consulta también:
+
+- `docs/ARCHITECTURE.md`
+- `docs/ROADMAP.md`
+- `docs/PACKAGING.md`
+
+## Limitaciones conocidas
+
+- Todavía no existe `note-compositor`; labwc sigue controlando ventanas y renderizado.
+- No hay blur real del fondo: la transparencia actual se simula desde GTK.
+- El overview enumera ventanas, pero no genera miniaturas vivas.
+- La cantidad de escritorios es fija, no dinámica como GNOME.
+- Algunas páginas de Configuración abren herramientas externas.
+- El greeter todavía es gtkgreet tematizado, no un greeter propio.
+- Los paquetes RPM y Arch son plantillas de mantenedor, no lanzamientos probados.
+
+## Licencia
+
+GNU GPL 3.0 o posterior. Consulta `LICENSE`.

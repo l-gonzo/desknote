@@ -1,0 +1,6 @@
+#!/bin/sh
+if ! gapplication action mx.note.desktop.shell control-center >/dev/null 2>&1; then
+  note-shell >/dev/null 2>&1 &
+  sleep 1
+  gapplication action mx.note.desktop.shell control-center >/dev/null 2>&1 || true
+fi

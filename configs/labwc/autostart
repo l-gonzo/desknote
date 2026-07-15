@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/local/libexec/note-autostart &
+/usr/libexec/note-desktop/note-autostart &

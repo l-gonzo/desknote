@@ -1,5 +1,6 @@
 #!/bin/sh
-for app in firefox-esr firefox epiphany chromium chromium-browser google-chrome; do
-  if command -v "$app" >/dev/null 2>&1; then exec "$app"; fi
+for command in epiphany firefox-esr firefox chromium chromium-browser; do
+  command -v "$command" >/dev/null 2>&1 && exec "$command" "$@"
 done
-exec xdg-open https://www.google.com
+echo "No se encontró navegador." >&2
+exit 1

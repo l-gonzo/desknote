@@ -1,39 +1,69 @@
-# Roadmap hacia el escritorio propio
+# Roadmap
 
-## 0.1 — MVP actual
+## 0.2 — Shell propio (esta entrega)
 
-- Login gráfico con greetd, cage y gtkgreet.
-- Sesión Wayland sin sesión Xorg.
-- Compatibilidad X11 mediante XWayland.
-- Barra y dock propios en Rust.
-- Audio PipeWire, red NetworkManager, Bluetooth, portales, bloqueo y capturas.
-- Instalador para Debian y Ubuntu mínimos.
+- Panel, dock y overview en Rust/GTK4.
+- Centro de control.
+- Configuración gráfica inicial.
+- Cinco idiomas.
+- Instalador Debian/Ubuntu más estricto.
+- Paquete `.deb` local.
+- Labwc como compositor temporal.
 
-## 0.2 — Shell utilizable diariamente
+## 0.3 — Compositor anidado
 
-- Bandeja StatusNotifierItem real.
-- Centro de control propio.
-- Lanzador propio indexando archivos `.desktop`.
-- Overview de ventanas y escritorios.
-- Notificaciones y OSD propios.
-- Configuración visual y persistencia TOML.
+- Workspace `note-compositor` con Smithay.
+- Backend anidado dentro de una sesión existente.
+- xdg-shell, layer-shell, input y ventanas básicas.
+- Protocolo privado para el shell.
+- XWayland rootless.
+- Pruebas automatizadas de estado y geometría.
 
-## 0.3 — `note-compositor` anidado con Smithay
+## 0.4 — Backend de hardware
 
-- xdg-shell, layer-shell, seat, data device y output management.
-- Ventanas flotantes, snapping, escritorios y atajos.
-- Backend anidado para desarrollar desde Note Desktop.
+- DRM/KMS, GBM y EGL.
+- AMD, Intel y NVIDIA.
+- Multi-GPU y PRIME.
+- Varios monitores.
+- Escalado entero y fraccional.
+- DMA-BUF y sincronización explícita.
+- Pixman como modo seguro.
 
-## 0.4 — Backend DRM/KMS
+## 0.5 — Experiencia de escritorio completa
 
-- libseat/logind, udev, libinput, GBM/EGL.
-- DMA-BUF feedback, modificadores y explicit sync.
-- AMD/Intel Mesa y NVIDIA GBM.
-- Múltiples monitores, VRR y escalado fraccional.
+- Escritorios dinámicos.
+- Overview con miniaturas en vivo.
+- Animaciones del compositor.
+- Blur y sombras reales.
+- Dock con agrupación, previews, badges y arrastrar/soltar.
+- Gestos multitáctiles.
+- Bloqueo propio mediante session-lock.
+- Notificaciones y calendario propios.
+- Accesibilidad inicial.
 
-## 0.5 — XWayland/XWM y portales propios
+## 0.6 — Integración
 
-- XWayland bajo demanda.
-- Gestión unificada de ventanas Wayland y X11.
-- Screencast PipeWire y RemoteDesktop.
-- Recuperación del shell sin perder la sesión.
+- `xdg-desktop-portal-note`.
+- Captura y screencast.
+- Configuración nativa de pantallas.
+- Gestión propia de red, Bluetooth, sonido y energía.
+- Usuarios, fecha/hora, aplicaciones predeterminadas y privacidad.
+- Actualizaciones y firmware.
+
+## 0.7 — Distribución
+
+- Repositorio APT firmado.
+- COPR/repositorio RPM.
+- PKGBUILD/AUR.
+- CI para Debian, Ubuntu, Fedora y Arch.
+- Pruebas en hardware AMD, Intel, NVIDIA y máquinas virtuales.
+- Migraciones de configuración y rollback.
+
+## 1.0
+
+- Sesión diaria estable.
+- Sin dependencia de labwc.
+- Instalación y desinstalación limpia.
+- Configuración básica sin terminal.
+- Recuperación ante fallos de GPU o shell.
+- Política documentada de compatibilidad y actualizaciones.

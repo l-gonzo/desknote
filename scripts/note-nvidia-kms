@@ -1,39 +1,8 @@
-#!/usr/bin/env bash
-set -Eeuo pipefail
-
-if ! lspci 2>/dev/null | grep -Ei 'VGA|3D|Display' | grep -qi nvidia; then
-  echo "No se detectó una GPU NVIDIA. No hay nada que aplicar."
-  exit 0
-fi
-
-if ! modinfo nvidia_drm >/dev/null 2>&1; then
-  cat >&2 <<'MSG'
-El controlador NVIDIA del kernel no está instalado.
-
-Ubuntu:
-  sudo ubuntu-drivers install
-
-Debian:
-  habilita contrib, non-free y non-free-firmware; después instala nvidia-driver.
-
-Este script no instala controladores propietarios automáticamente.
-MSG
-  exit 1
-fi
-
-if [[ ${EUID} -eq 0 ]]; then
-  sudo() { command "$@"; }
-else
-  command -v sudo >/dev/null 2>&1 || { echo "Ejecuta como root o instala sudo." >&2; exit 1; }
-fi
-
-sudo tee /etc/modprobe.d/note-nvidia-kms.conf >/dev/null <<'CFG'
-# Note Desktop: Wayland/GBM requiere DRM KMS.
+#!/bin/sh
+set -eu
+if [ "$(id -u)" -ne 0 ]; then exec sudo "$0" "$@"; fi
+cat > /etc/modprobe.d/note-nvidia-kms.conf <<'CONF'
 options nvidia_drm modeset=1 fbdev=1
-CFG
-
-if command -v update-initramfs >/dev/null 2>&1; then
-  sudo update-initramfs -u
-fi
-
-echo "Configuración NVIDIA KMS aplicada. Reinicia y ejecuta note-doctor."
+CONF
+update-initramfs -u
+printf 'NVIDIA DRM KMS habilitado. Reinicia el sistema.\n'

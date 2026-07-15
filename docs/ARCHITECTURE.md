@@ -1,24 +1,97 @@
-# Arquitectura del MVP
+# Arquitectura de Note Desktop
+
+## Capas actuales
 
 ```text
 greetd
-  └─ cage
-      └─ gtkgreet
-          └─ note-session
-              └─ dbus-run-session
-                  └─ labwc (Wayland + XWayland)
-                      ├─ note-shell (Rust + GTK4 layer shell)
-                      ├─ swaybg
-                      ├─ mako
-                      ├─ NetworkManager applet
-                      ├─ Blueman applet
-                      └─ aplicaciones Wayland/XWayland
+└── cage
+    └── gtkgreet
+        └── note-session
+            └── labwc
+                ├── XWayland
+                ├── note-shell
+                ├── mako
+                ├── lxpolkit
+                ├── swaybg
+                └── aplicaciones
 ```
 
-## Por qué labwc en la primera entrega
+`note-shell` es una aplicación GTK4 con superficies layer-shell separadas:
 
-La interfaz, sesión, login, integración y empaquetado se pueden probar sin esperar a que el compositor Smithay propio tenga administración de ventanas, DMA-BUF, múltiples GPU, XWayland/XWM, portales y recuperación de errores suficientemente maduros. Labwc es una base Wayland pequeña que deliberadamente delega panel, fondo y demás piezas a clientes externos.
+- panel por monitor;
+- dock por monitor;
+- overview overlay;
+- centro de control overlay.
 
-## Sustitución futura
+`note-core` concentra configuración, traducciones, descubrimiento de archivos `.desktop`, llamadas a `wlrctl`, audio, brillo, Wi-Fi y Bluetooth.
 
-`note-session-inner` es el único punto que necesita cambiar para reemplazar `labwc` por `note-compositor`. Note Shell ya usa `wlr-layer-shell`, por lo que puede conservarse con un compositor Smithay que implemente dicho protocolo.
+`note-settings` escribe configuración de usuario y pide al shell y a labwc que se recarguen.
+
+## Servicios de usuario
+
+La sesión usa `note-session.target`:
+
+```text
+note-session.target
+├── note-shell.service
+├── note-notifications.service
+└── note-polkit-agent.service
+```
+
+El autostart de labwc importa el entorno Wayland y activa el target. Esto evita lanzar todo desde un único script monolítico.
+
+## Configuración
+
+Configuración global:
+
+```text
+/etc/xdg/note/labwc/
+/etc/greetd/
+/etc/note-desktop/
+```
+
+Configuración de usuario:
+
+```text
+~/.config/note-desktop/settings.toml
+~/.config/labwc/rc.xml
+~/.config/environment.d/90-note-locale.conf
+```
+
+## IPC actual
+
+- `gapplication action mx.note.desktop.shell overview`
+- `gapplication action mx.note.desktop.shell control-center`
+- `gapplication action mx.note.desktop.shell reload`
+- `wlrctl` para enumerar y enfocar ventanas.
+- D-Bus de NetworkManager, PipeWire y demás a través de sus herramientas de usuario.
+
+## Arquitectura objetivo
+
+```text
+note-greeter
+└── note-session
+    └── note-compositor (Smithay)
+        ├── protocolo privado note-shell-v1
+        ├── XWayland bajo demanda
+        ├── note-shell
+        ├── note-settings-daemon
+        ├── note-notifications
+        ├── note-lock
+        └── xdg-desktop-portal-note
+```
+
+El compositor futuro absorberá:
+
+- DRM/KMS, GBM y EGL;
+- GPU múltiple;
+- sincronización explícita;
+- DMA-BUF feedback;
+- gestión de ventanas;
+- escritorios dinámicos;
+- miniaturas y animaciones;
+- blur, sombras y redondeo real;
+- gestos y direct scanout;
+- XWayland on demand.
+
+El shell permanecerá separado para que una caída del dock o del panel no mate las aplicaciones.

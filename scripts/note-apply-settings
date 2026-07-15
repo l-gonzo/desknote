@@ -1,0 +1,31 @@
+#!/bin/sh
+set -eu
+settings="${XDG_CONFIG_HOME:-$HOME/.config}/note-desktop/settings.toml"
+labwc_dir="${XDG_CONFIG_HOME:-$HOME/.config}/labwc"
+mkdir -p "$labwc_dir"
+
+python3 - "$settings" "$labwc_dir/rc.xml" <<'PY'
+import pathlib, sys
+try:
+    import tomllib
+except ModuleNotFoundError:
+    tomllib = None
+settings_path = pathlib.Path(sys.argv[1])
+out = pathlib.Path(sys.argv[2])
+data = {}
+if settings_path.exists() and tomllib:
+    with settings_path.open('rb') as handle:
+        data = tomllib.load(handle)
+workspaces = max(1, min(9, int(data.get('workspaces', 4))))
+natural = 'yes' if data.get('natural_scroll', True) else 'no'
+out.write_text(f'''<?xml version="1.0"?>
+<labwc_config xmlns="http://openbox.org/3.4/rc">
+  <desktops number="{workspaces}" />
+  <libinput>
+    <device category="touchpad"><naturalScroll>{natural}</naturalScroll></device>
+  </libinput>
+</labwc_config>
+''')
+PY
+
+labwc --reconfigure >/dev/null 2>&1 || true

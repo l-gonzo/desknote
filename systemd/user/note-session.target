@@ -1,0 +1,9 @@
+[Unit]
+Description=Note Desktop user session
+Wants=note-shell.service note-notifications.service note-polkit-agent.service
+After=graphical-session-pre.target
+BindsTo=graphical-session.target
+PartOf=graphical-session.target
+
+[Install]
+WantedBy=graphical-session.target

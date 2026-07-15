@@ -1,17 +1,20 @@
-.PHONY: build check install uninstall archive
+.PHONY: build check install uninstall package-deb archive
 
 build:
 	cargo build --release
 
 check:
-	cargo fmt --check
+	cargo fmt --all -- --check
 	cargo clippy --workspace --all-targets -- -D warnings
 
-install:
-	./scripts/install.sh
+install: build
+	sudo ./scripts/install-files.sh
 
 uninstall:
 	./scripts/uninstall.sh
 
+package-deb:
+	./scripts/build-deb.sh
+
 archive:
-	tar --exclude=target -czf note-desktop-mvp.tar.gz .
+	./scripts/make-release.sh

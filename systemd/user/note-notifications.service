@@ -1,0 +1,13 @@
+[Unit]
+Description=Note Desktop notifications
+PartOf=note-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/mako
+Restart=on-failure
+Slice=background.slice
+
+[Install]
+WantedBy=note-session.target

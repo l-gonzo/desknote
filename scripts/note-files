@@ -1,6 +1,6 @@
 #!/bin/sh
-for app in nautilus thunar pcmanfm dolphin; do
-  if command -v "$app" >/dev/null 2>&1; then exec "$app"; fi
+for command in thunar nautilus nemo dolphin pcmanfm; do
+  command -v "$command" >/dev/null 2>&1 && exec "$command" "$@"
 done
-notify-send "Note Desktop" "No hay administrador de archivos instalado"
+echo "No se encontró administrador de archivos." >&2
 exit 1

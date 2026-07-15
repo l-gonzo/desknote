@@ -1,39 +1,34 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
+if [[ ${EUID} -ne 0 ]]; then exec sudo "$0" "$@"; fi
 
-if [[ ${EUID} -eq 0 ]]; then
-  sudo() {
-    if [[ ${1:-} == "-v" ]]; then return 0; fi
-    command "$@"
-  }
-else
-  command -v sudo >/dev/null 2>&1 || {
-    echo "Instala sudo o ejecuta este desinstalador como root." >&2
-    exit 1
-  }
-fi
+systemctl disable --now greetd.service 2>/dev/null || true
+systemctl set-default multi-user.target || true
 
-sudo -v
-sudo systemctl disable --now greetd.service 2>/dev/null || true
-
-latest_backup="$(sudo find /etc/greetd -maxdepth 1 -type f -name 'config.toml.note-backup-*' -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -n1 | cut -d' ' -f2-)"
+latest_backup="$(ls -1t /var/lib/note-desktop/greetd-config-*.toml 2>/dev/null | head -n1 || true)"
 if [[ -n "$latest_backup" ]]; then
-  echo "Restaurando $latest_backup"
-  sudo cp -a "$latest_backup" /etc/greetd/config.toml
+  install -Dm0644 "$latest_backup" /etc/greetd/config.toml
 else
-  sudo tee /etc/greetd/config.toml >/dev/null <<'CFG'
-[terminal]
-vt = 1
-[default_session]
-command = "agreety --cmd /bin/sh"
-user = "greeter"
-CFG
+  rm -f /etc/greetd/config.toml
 fi
 
-sudo rm -f /usr/local/bin/note-{shell,session,launcher,terminal,files,browser,editor,network,audio,lock,logout,reboot,poweroff,screenshot,doctor,nvidia-kms,test-from-tty}
-sudo rm -f /usr/local/libexec/note-{session-inner,autostart}
-sudo rm -rf /usr/share/note-desktop /etc/xdg/note /etc/note-desktop
-sudo rm -f /usr/share/wayland-sessions/note.desktop /etc/greetd/note-greet.css
-sudo systemctl set-default multi-user.target
+rm -f \
+  /usr/bin/note-shell /usr/bin/note-settings /usr/bin/note-session \
+  /usr/bin/note-overview /usr/bin/note-control-center /usr/bin/note-workspace \
+  /usr/bin/note-terminal /usr/bin/note-files /usr/bin/note-browser /usr/bin/note-editor \
+  /usr/bin/note-lock /usr/bin/note-logout /usr/bin/note-reboot /usr/bin/note-poweroff \
+  /usr/bin/note-screenshot /usr/bin/note-apply-settings /usr/bin/note-doctor \
+  /usr/bin/note-test-from-tty /usr/bin/note-nvidia-kms
+rm -rf /usr/libexec/note-desktop /usr/share/note-desktop /usr/share/themes/Note /etc/xdg/note /etc/note-desktop
+rm -f /usr/share/wayland-sessions/note.desktop /usr/share/applications/note-settings.desktop
+rm -f /usr/share/icons/hicolor/scalable/apps/note-desktop-symbolic.svg
+rm -f /usr/share/xdg-desktop-portal/note-portals.conf
+rm -f /usr/lib/systemd/user/note-shell.service /usr/lib/systemd/user/note-notifications.service
+rm -f /usr/lib/systemd/user/note-polkit-agent.service /usr/lib/systemd/user/note-session.target
+rm -f /etc/greetd/note-config.toml /etc/greetd/note-greet.css
 
-echo "Note Desktop fue retirado. Los paquetes del sistema se conservaron intencionalmente."
+systemctl daemon-reload
+update-desktop-database /usr/share/applications 2>/dev/null || true
+gtk-update-icon-cache -q /usr/share/icons/hicolor 2>/dev/null || true
+
+echo "Note Desktop eliminado. Los paquetes compartidos se conservaron."

@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+workspace="${1:-1}"
+case "$workspace" in
+  [1-9]) ;;
+  *) echo "Uso: note-workspace 1..9" >&2; exit 2 ;;
+esac
+wlrctl keyboard type "$workspace" SUPER >/dev/null 2>&1 || true

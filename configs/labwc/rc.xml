@@ -2,54 +2,65 @@
 <labwc_config xmlns="http://openbox.org/3.4/rc">
   <core>
     <decoration>server</decoration>
-    <gap>8</gap>
+    <gap>10</gap>
     <adaptiveSync>yes</adaptiveSync>
     <reuseOutputMode>yes</reuseOutputMode>
     <xwaylandPersistence>no</xwaylandPersistence>
   </core>
 
   <theme>
-    <name>Adwaita</name>
-    <cornerRadius>10</cornerRadius>
-    <font place="ActiveWindow"><name>Cantarell</name><size>10</size><weight>Bold</weight></font>
-    <font place="InactiveWindow"><name>Cantarell</name><size>10</size></font>
-    <font place="MenuItem"><name>Cantarell</name><size>10</size></font>
-    <font place="OnScreenDisplay"><name>Cantarell</name><size>11</size><weight>Bold</weight></font>
+    <name>Note</name>
+    <icon>Adwaita</icon>
+    <cornerRadius>12</cornerRadius>
+    <titlebar><layout>close,max,iconify:</layout></titlebar>
+    <font place="ActiveWindow"><name>Inter</name><size>10</size><weight>Semibold</weight></font>
+    <font place="InactiveWindow"><name>Inter</name><size>10</size></font>
+    <font place="MenuItem"><name>Inter</name><size>10</size></font>
+    <font place="OnScreenDisplay"><name>Inter</name><size>11</size><weight>Bold</weight></font>
   </theme>
 
-  <desktops>
-    <popupTime>900</popupTime>
-    <names>
-      <name>Principal</name>
-      <name>Trabajo</name>
-      <name>Comunicación</name>
-      <name>Extra</name>
-    </names>
+  <desktops number="4">
+    <popupTime>650</popupTime>
+    <prefix>Escritorio</prefix>
   </desktops>
 
-  <resize><popupShow>Always</popupShow></resize>
+  <resize><popupShow>Always</popupShow><drawContents>yes</drawContents></resize>
   <focus><followMouse>no</followMouse><raiseOnFocus>no</raiseOnFocus></focus>
-  <snapping><screenEdgeStrength>18</screenEdgeStrength><windowEdgeStrength>10</windowEdgeStrength></snapping>
+  <snapping>
+    <screenEdgeStrength>18</screenEdgeStrength>
+    <windowEdgeStrength>10</windowEdgeStrength>
+  </snapping>
 
   <keyboard>
     <default />
-    <keybind key="W-Space"><action name="Execute" command="/usr/local/bin/note-launcher" /></keybind>
-    <keybind key="W-Return"><action name="Execute" command="/usr/local/bin/note-terminal" /></keybind>
-    <keybind key="W-e"><action name="Execute" command="/usr/local/bin/note-files" /></keybind>
-    <keybind key="W-b"><action name="Execute" command="/usr/local/bin/note-browser" /></keybind>
-    <keybind key="W-l"><action name="Execute" command="/usr/local/bin/note-lock" /></keybind>
+    <keybind key="Super_L" onRelease="yes"><action name="Execute" command="note-overview" /></keybind>
+    <keybind key="W-Space"><action name="Execute" command="note-overview" /></keybind>
+    <keybind key="W-Return"><action name="Execute" command="note-terminal" /></keybind>
+    <keybind key="W-e"><action name="Execute" command="note-files" /></keybind>
+    <keybind key="W-b"><action name="Execute" command="note-browser" /></keybind>
+    <keybind key="W-comma"><action name="Execute" command="note-settings" /></keybind>
+    <keybind key="W-l"><action name="Execute" command="note-lock" /></keybind>
     <keybind key="W-q"><action name="Close" /></keybind>
     <keybind key="W-f"><action name="ToggleFullscreen" /></keybind>
-    <keybind key="W-m"><action name="ToggleMaximize" /></keybind>
-    <keybind key="W-Left"><action name="SnapToEdge" direction="left" combine="yes" /></keybind>
-    <keybind key="W-Right"><action name="SnapToEdge" direction="right" combine="yes" /></keybind>
-    <keybind key="W-Up"><action name="SnapToEdge" direction="up" combine="yes" /></keybind>
-    <keybind key="W-Down"><action name="SnapToEdge" direction="down" combine="yes" /></keybind>
+    <keybind key="W-m"><action name="Iconify" /></keybind>
+    <keybind key="W-Up"><action name="ToggleMaximize" /></keybind>
+    <keybind key="W-Left"><action name="SnapToEdge" direction="left" /></keybind>
+    <keybind key="W-Right"><action name="SnapToEdge" direction="right" /></keybind>
+    <keybind key="W-Down"><action name="SnapToEdge" direction="down" /></keybind>
     <keybind key="W-C-Left"><action name="GoToDesktop" to="left" wrap="yes" /></keybind>
     <keybind key="W-C-Right"><action name="GoToDesktop" to="right" wrap="yes" /></keybind>
     <keybind key="W-C-S-Left"><action name="SendToDesktop" to="left" wrap="yes" follow="yes" /></keybind>
     <keybind key="W-C-S-Right"><action name="SendToDesktop" to="right" wrap="yes" follow="yes" /></keybind>
-    <keybind key="Print"><action name="Execute" command="/usr/local/bin/note-screenshot" /></keybind>
+    <keybind key="W-1"><action name="GoToDesktop" to="1" /></keybind>
+    <keybind key="W-2"><action name="GoToDesktop" to="2" /></keybind>
+    <keybind key="W-3"><action name="GoToDesktop" to="3" /></keybind>
+    <keybind key="W-4"><action name="GoToDesktop" to="4" /></keybind>
+    <keybind key="W-5"><action name="GoToDesktop" to="5" /></keybind>
+    <keybind key="W-6"><action name="GoToDesktop" to="6" /></keybind>
+    <keybind key="W-7"><action name="GoToDesktop" to="7" /></keybind>
+    <keybind key="W-8"><action name="GoToDesktop" to="8" /></keybind>
+    <keybind key="W-9"><action name="GoToDesktop" to="9" /></keybind>
+    <keybind key="Print"><action name="Execute" command="note-screenshot" /></keybind>
     <keybind key="XF86AudioRaiseVolume"><action name="Execute" command="wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+" /></keybind>
     <keybind key="XF86AudioLowerVolume"><action name="Execute" command="wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-" /></keybind>
     <keybind key="XF86AudioMute"><action name="Execute" command="wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" /></keybind>

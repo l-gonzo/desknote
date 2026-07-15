@@ -1,14 +1,29 @@
 #!/bin/sh
-set -eu
+set -u
+
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 dbus-update-activation-environment --systemd \
   DBUS_SESSION_BUS_ADDRESS DISPLAY WAYLAND_DISPLAY \
   XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE \
-  XDG_RUNTIME_DIR 2>/dev/null || true
+  XDG_RUNTIME_DIR LANG LANGUAGE LC_MESSAGES 2>/dev/null || true
 
 systemctl --user import-environment \
   DBUS_SESSION_BUS_ADDRESS DISPLAY WAYLAND_DISPLAY \
   XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE \
-  XDG_RUNTIME_DIR 2>/dev/null || true
+  XDG_RUNTIME_DIR LANG LANGUAGE LC_MESSAGES 2>/dev/null || true
 
-exec labwc
+start_time=$(date +%s)
+labwc --merge-config
+status=$?
+elapsed=$(( $(date +%s) - start_time ))
+
+# A normal logout usually happens after the session has been alive for a while.
+# Only retry with software rendering after an immediate graphics failure.
+if [ "$status" -ne 0 ] && [ "$elapsed" -lt 12 ] && [ "${WLR_RENDERER:-}" != "pixman" ]; then
+  echo "note-session: accelerated renderer failed; retrying with pixman" >&2
+  export WLR_RENDERER=pixman
+  export WLR_NO_HARDWARE_CURSORS=1
+  exec labwc --merge-config
+fi
+exit "$status"
