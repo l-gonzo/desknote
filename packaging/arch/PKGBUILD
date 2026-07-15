@@ -1,5 +1,5 @@
 pkgname=note-desktop
-pkgver=0.2.0
+pkgver=0.2.1
 pkgrel=1
 pkgdesc='Experimental Wayland desktop with a GNOME-like workflow and macOS-inspired shell'
 arch=('x86_64')

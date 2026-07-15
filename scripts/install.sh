@@ -4,6 +4,8 @@ export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STAMP="$(date +%Y%m%d-%H%M%S)"
+VERSION="$(cat "$ROOT_DIR/VERSION" 2>/dev/null || printf 'desconocida')"
+printf 'Note Desktop installer %s\n' "$VERSION"
 
 if [[ ! -r /etc/os-release ]]; then
   echo "No se pudo identificar la distribución." >&2
@@ -107,7 +109,25 @@ critical_commands=(labwc Xwayland cage gtkgreet wlrctl pkg-config cargo rustc)
 for command in "${critical_commands[@]}"; do
   command -v "$command" >/dev/null 2>&1 || { echo "Falta dependencia crítica: $command" >&2; exit 1; }
 done
-[[ -x /usr/sbin/greetd || -x /usr/bin/greetd ]] || { echo "Falta greetd." >&2; exit 1; }
+
+# En Debian greetd es un daemon de sbin. No debe validarse sólo con command -v,
+# porque el PATH de usuarios normales puede omitir /usr/sbin.
+greetd_bin=""
+for candidate_path in /usr/sbin/greetd /usr/bin/greetd; do
+  if [[ -x "$candidate_path" ]]; then
+    greetd_bin="$candidate_path"
+    break
+  fi
+done
+if [[ -z "$greetd_bin" ]] && command -v greetd >/dev/null 2>&1; then
+  greetd_bin="$(command -v greetd)"
+fi
+if [[ -z "$greetd_bin" ]]; then
+  echo "Falta greetd: el paquete no dejó un ejecutable utilizable." >&2
+  echo "Diagnóstico: dpkg-query -W greetd; dpkg -L greetd" >&2
+  exit 1
+fi
+printf '[ok] greetd: %s\n' "$greetd_bin"
 pkg-config --exists gtk4 || { echo "No se encontró GTK4 con pkg-config." >&2; exit 1; }
 pkg-config --exists gtk4-layer-shell-0 || { echo "No se encontró gtk4-layer-shell." >&2; exit 1; }
 
@@ -148,7 +168,7 @@ fi
 
 cat <<'MSG'
 
-Note Desktop 0.2.0 quedó instalado.
+Note Desktop 0.2.1 quedó instalado.
 
 Prueba antes de reiniciar:
   1. Ctrl+Alt+F3

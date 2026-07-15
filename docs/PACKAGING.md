@@ -23,7 +23,7 @@ Construcción local:
 
 ```bash
 ./scripts/build-deb.sh
-sudo apt install ./dist/note-desktop_0.2.0_amd64.deb
+sudo apt install ./dist/note-desktop_0.2.1_amd64.deb
 ```
 
 Para distribución pública:

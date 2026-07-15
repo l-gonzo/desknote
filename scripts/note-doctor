@@ -7,10 +7,19 @@ warn() { printf '\033[33m[AVISO]\033[0m %s\n' "$*"; }
 fail() { printf '\033[31m[FALTA]\033[0m %s\n' "$*"; }
 
 printf 'Note Desktop doctor %s\n\n' "0.2.0"
-critical=(labwc Xwayland greetd cage gtkgreet note-shell note-settings wlrctl swaybg mako wpctl)
+critical=(labwc Xwayland cage gtkgreet note-shell note-settings wlrctl swaybg mako wpctl)
 for command in "${critical[@]}"; do
   if command -v "$command" >/dev/null 2>&1; then ok "$command: $(command -v "$command")"; else fail "$command"; fi
 done
+if [[ -x /usr/sbin/greetd ]]; then
+  ok "greetd: /usr/sbin/greetd"
+elif [[ -x /usr/bin/greetd ]]; then
+  ok "greetd: /usr/bin/greetd"
+elif command -v greetd >/dev/null 2>&1; then
+  ok "greetd: $(command -v greetd)"
+else
+  fail "greetd"
+fi
 
 printf '\nSesión:\n'
 printf '  XDG_SESSION_TYPE=%s\n' "${XDG_SESSION_TYPE:-sin definir}"
