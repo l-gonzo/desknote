@@ -1,4 +1,4 @@
-# Note Desktop 0.2.2 Alpha
+# Note Desktop 0.2.3 Alpha
 
 Note Desktop es un entorno Wayland experimental con flujo de trabajo inspirado en GNOME y una identidad visual inspirada en macOS. Esta entrega reemplaza la barra y el dock genéricos del MVP por un shell propio escrito en Rust y GTK4.
 
