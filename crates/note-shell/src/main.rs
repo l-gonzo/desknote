@@ -30,7 +30,7 @@ fn main() -> glib::ExitCode {
 
     let app = gtk::Application::builder()
         .application_id(APP_ID)
-        .flags(gio::ApplicationFlags::DEFAULT_FLAGS)
+        .flags(gio::ApplicationFlags::empty())
         .build();
     let state = Rc::new(RefCell::new(ShellState::default()));
 
