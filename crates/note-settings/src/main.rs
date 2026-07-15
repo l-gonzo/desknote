@@ -46,7 +46,7 @@ fn build_ui(app: &gtk::Application) {
     stack.set_transition_type(gtk::StackTransitionType::Crossfade);
 
     let controls = build_appearance_page(&stack, &tr, &settings);
-    add_page(&sidebar, &stack, "appearance", "preferences-desktop-theme-symbolic", &tr.text("appearance"), controls.page);
+    add_page(&sidebar, &stack, "appearance", "preferences-desktop-theme-symbolic", &tr.text("appearance"), controls.page.clone());
     add_page(&sidebar, &stack, "language", "preferences-desktop-locale-symbolic", &tr.text("language-region"), build_language_page(&tr));
     add_page(&sidebar, &stack, "displays", "video-display-symbolic", &tr.text("displays"), build_launcher_page(&tr, "video-display-symbolic", "display-description", &["wdisplays", "arandr"]));
     add_page(&sidebar, &stack, "network", "network-wireless-symbolic", &tr.text("network"), build_launcher_page(&tr, "network-wireless-symbolic", "network-description", &["nm-connection-editor"]));
